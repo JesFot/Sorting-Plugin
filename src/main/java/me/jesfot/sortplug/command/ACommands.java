@@ -22,6 +22,7 @@ public class ACommands
 	public void regCommands()
 	{
 		this.sp.getPlugin().getCommand("testspplugin").setExecutor(new TestPlugCommand());
+		this.sp.getPlugin().getCommand("addfilter").setExecutor(new HopperAddCommand(this.sp));
 	}
 	
 	public static boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)

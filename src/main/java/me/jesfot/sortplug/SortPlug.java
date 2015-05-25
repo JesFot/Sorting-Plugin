@@ -77,6 +77,26 @@ public class SortPlug
 	}
 	
 	/**
+	 * Get the system of the configuration of this plugin
+	 * 
+	 * @return - The configuration system class
+	 */
+	public Config getConfig()
+	{
+		return config;
+	}
+	
+	/**
+	 * Get the commands class
+	 * 
+	 * @return - The main plugin commands class
+	 */
+	public ACommands getCommands()
+	{
+		return commands;
+	}
+	
+	/**
 	 * Get the server
 	 * 
 	 * @return - The server

@@ -19,3 +19,6 @@ commands:
   testspplugin:
     description: This command test if the plugin is active
     usage: /<command>
+  addfilter:
+    description: Nop.
+    usage: /<command> [x, y, z] <itemType>
