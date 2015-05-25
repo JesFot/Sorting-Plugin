@@ -1,0 +1,21 @@
+name: Sorting Plugin
+main: me.jesfot.sortplug.bukkit.BukkitPlugin
+version: 1.0.0-SNAPSHOT
+description: Simple plugin that sort items passed in a hopper.
+authors: ["JesFot"]
+permissions:
+  sortp.*:
+    description: All plugin commands and access
+    children:
+      sortp.setitems: true
+      sortp.owner: true
+  sortp.setitems:
+    description: Set item filter
+    default: true
+  sortp.owner:
+    description: Define the owner and persons can configure the filter
+    default: true
+commands:
+  testspplugin:
+    description: This command test if the plugin is active
+    usage: /<command>
