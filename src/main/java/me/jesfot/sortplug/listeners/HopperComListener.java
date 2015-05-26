@@ -49,7 +49,21 @@ public class HopperComListener implements Listener
 						this.conf.getCustomConfig().createSection("filters.ids");
 						this.conf.getCustomConfig().set("filters.ids", 0);
 					}
-					int id = this.sp.getConfig().getCustomConfig().getInt("filters.ids"); // Get the next id
+					int ids = this.conf.getCustomConfig().getInt("filters.ids"); // Get the total ids
+					int id = -1;
+					for(int i=0; i<ids; i++)
+					{
+						Location loca = this.conf.getLoc("filters.hoppers.id"+i+".location");
+						if(loca != null && location.equals(loca))
+						{
+							id = ids;
+							break;
+						}
+					}
+					if(id == -1)
+					{
+						id = ids; // If we don't already have this location stored, store a new one
+					}
 					this.conf.storeLoc("filters.hoppers.id"+id+".location", location); // Save the location at this id
 					this.conf.getCustomConfig().set("filters.ids", (id+1)); // Store the id+1 for the next registration
 					if(!this.conf.getCustomConfig().contains("filters.hoppers.id"+id+".items"))

@@ -12,12 +12,14 @@ import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
 public class SortPlug
 {
 	private final Server server; // Get the server,
 	private final Logger logger; // the logger to can log messages
 	private final JavaPlugin plugin; // and the plugin.
+	public List<BukkitTask> tasks;
 	private ACommands commands;
 	private Config config;
 

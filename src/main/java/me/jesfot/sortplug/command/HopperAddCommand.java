@@ -83,7 +83,21 @@ public class HopperAddCommand implements CommandExecutor
 					this.sp.getConfig().getCustomConfig().createSection("filters.ids");
 					this.sp.getConfig().getCustomConfig().set("filters.ids", 0);
 				}
-				int id = this.sp.getConfig().getCustomConfig().getInt("filters.ids"); // Get the next id
+				int ids = this.sp.getConfig().getCustomConfig().getInt("filters.ids"); // Get the total ids
+				int id = -1;
+				for(int i=0; i<ids; i++)
+				{
+					Location loca = this.sp.getConfig().getLoc("filters.hoppers.id"+i+".location");
+					if(loca != null && loc.equals(loca))
+					{
+						id = ids;
+						break;
+					}
+				}
+				if(id == -1)
+				{
+					id = ids; // If we don't already have this location stored, store a new one
+				}
 				this.sp.getConfig().storeLoc("filters.hoppers.id"+id+".location", loc); // Save the location at this id
 				this.sp.getConfig().getCustomConfig().set("filters.ids", (id+1)); // Store the id+1 for the next registration
 				if(!this.sp.getConfig().getCustomConfig().contains("filters.hoppers.id"+id+".items"))

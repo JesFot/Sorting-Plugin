@@ -122,7 +122,7 @@ public class Config
 	}
 	
 	/**
-	 * This will return the strored location at 'name' or null saved by {@link {@code storeLoc(name, loc)}. 
+	 * This will return the strored location at 'name' or null saved by {@link Config#storeLoc(name, loc)}. 
 	 * 
 	 * @param name - The name of the location
 	 * @return The location requested if exists
@@ -155,7 +155,7 @@ public class Config
 		else
 		{
 			this.saveCustomConfig();
-			if(Refs.DEBUG)
+			if(Refs.DEBUG2)
 			{
 				this.sp.getLogger().warning("[SortingPlugin.Config.java:160] Location corrupted.");
 			}

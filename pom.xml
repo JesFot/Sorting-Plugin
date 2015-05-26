@@ -5,7 +5,7 @@
   <groupId>me.jesfot.sortplugin</groupId>
   <artifactId>SortingPlugin</artifactId>
   <description>This plugin sort items in chests with less hoppers</description>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.8_2.3-ALPHA</version>
   <packaging>jar</packaging>
 
   <name>Sorting-Plugin</name>

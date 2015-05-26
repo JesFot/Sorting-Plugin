@@ -5,17 +5,19 @@ import java.util.List;
 
 import me.jesfot.sortplug.Refs;
 import me.jesfot.sortplug.SortPlug;
+import me.jesfot.sortplug.runnable.ReplaceBlockTask;
+import me.jesfot.sortplug.utils.BlockUtils;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Hopper;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
 
 /**
  * Inventory interactions event listener class
@@ -35,88 +37,72 @@ public class InventoryListener implements Listener
 	 * 
 	 * @param event - The Inventory Move Item event
 	 */
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
 	public void onMoveItem(InventoryMoveItemEvent event)
 	{
-		event.getDestination().clear();
-		event.getSource().clear();
-		boolean pass = false;
+		// Get items and inventory
 		Material item = event.getItem().getType();
 		InventoryHolder holder = event.getSource().getHolder();
 		if(!(holder instanceof Hopper))
 		{
-			return;
+			return; // If is ot an hopper, pass.
 		}
 		Hopper hopper = (Hopper)holder;
 		Location hlocation = hopper.getLocation();
+		// For all registered hoppers locations
 		for(int i=0; i<=this.sp.getConfig().getCustomConfig().getInt("filters.ids"); i++)
 		{
+			Refs.DEBUG = false;
 			Location actu = this.sp.getConfig().getLoc("filters.hoppers.id"+i+".location");
+			Refs.DEBUG = Refs.DEBUG2;
 			if(actu == null)
 			{
-				continue;
+				continue; // Error ?
 			}
+			// Get authorised items.
 			List<String> whitelist = this.sp.getConfig().getCustomConfig().getStringList("filters.hoppers.id"+i+".items");
 			if(whitelist == null)
 			{
-				continue;
+				continue; // Error ?
 			}
+			//Transform it to materials
 			List<Material> mats = new ArrayList<Material>();
 			for(String str : whitelist)
 			{
 				mats.add(Material.valueOf(str));
 			}
+			// If we are at the same location as registered do
 			if(hlocation.equals(actu))
 			{
-				if(mats.contains(item))
+				// Get datas for downer block
+				Location down = actu;
+				down.setY(down.getY()-1);
+				Block b = down.getBlock();
+				if(b.getType() == Material.HOPPER)
 				{
-					Location down = actu;
-					down.setY(down.getY()-1);
-					Block b = down.getBlock();
-					if(Refs.DEBUG)
+					if(mats.contains(item))
 					{
-						this.sp.getLogger().info("[DEBUG] Ferify if down is an inventory: ");
-						for(ItemStack its : event.getDestination().getContents())
-						{
-							if(its != null)
-							{
-								this.sp.getLogger().info(its.getClass().toString());
-							}
-							else
-							{
-								this.sp.getLogger().info("void");
-							}
-						}
-						this.sp.getLogger().info("[DEBUG] Ferify if down is an inventory: ");
-						for(ItemStack its : event.getSource().getContents())
-						{
-							if(its != null)
-							{
-								this.sp.getLogger().info(its.getClass().toString());
-							}
-							else
-							{
-								this.sp.getLogger().info("void");
-							}
-						}
+						continue; // If it's good items, nothing to do, let gravity do it jobs.
 					}
-					if(b.getType() == Material.CHEST || b.getType() == Material.HOPPER)
+					else if(((Hopper)(InventoryHolder)event.getDestination().getHolder()).equals((Hopper)(InventoryHolder)b.getState()))
 					{
-						//InventoryHolder h = (InventoryHolder)b.getState();
-						//h.getInventory().addItem(new ItemStack(item));
-						hopper = hopper.getRelative(BlockFace.DOWN);
-						pass = true;
-						if(Refs.DEBUG)
+						BlockFace face = BlockUtils.getFirstAir(b.getLocation());
+						if(face == BlockFace.SELF)
 						{
-							this.sp.getLogger().info("[DEBUG] item passed to an other inventory.");
+							if(Refs.DEBUG)
+							{
+								this.sp.getLogger().warning("[InventoryListener:88]Cannot filter item because there are no disponible blocks");
+							}
+							continue;
 						}
+						// Place a redstone bock to stop the item and remove the redstone block, will be removed
+						// I don't want to touch aroud blocks
+						new ReplaceBlockTask(b.getRelative(face).getLocation(), Material.AIR).runTaskLater(this.sp.getPlugin(), 10);
+						b.getRelative(face).setType(Material.REDSTONE_BLOCK);
+						event.setCancelled(true);
 					}
 				}
 			}
-		}
-		if(!pass)
-		{
-			event.getDestination().addItem(new ItemStack(item));
 		}
 	}
 }

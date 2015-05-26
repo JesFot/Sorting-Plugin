@@ -5,6 +5,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+/**
+ * Simple test command.
+ */
 public class TestPlugCommand implements CommandExecutor
 {
 	private String usageMessage = "Usage: /testspplugin";
