@@ -102,8 +102,9 @@ public class InventoryListener implements Listener
 					}
 					if(b.getType() == Material.CHEST || b.getType() == Material.HOPPER)
 					{
-						InventoryHolder h = (InventoryHolder)b.getState();
-						h.getInventory().addItem(new ItemStack(item));
+						//InventoryHolder h = (InventoryHolder)b.getState();
+						//h.getInventory().addItem(new ItemStack(item));
+						hopper = hopper.getRelative(BlockFace.DOWN);
 						pass = true;
 						if(Refs.DEBUG)
 						{
