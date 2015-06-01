@@ -86,12 +86,13 @@ public class InventoryListener implements Listener
 					}
 					else if(((Hopper)(InventoryHolder)event.getDestination().getHolder()).equals((Hopper)(InventoryHolder)b.getState()))
 					{
+						hopper.removeItem(item);
 						BlockFace face = BlockUtils.getFirstAir(b.getLocation());
 						if(face == BlockFace.SELF)
 						{
 							if(Refs.DEBUG)
 							{
-								this.sp.getLogger().warning("[InventoryListener:88]Cannot filter item because there are no disponible blocks");
+								this.sp.getLogger().warning("[InventoryListener:94]Cannot filter item because there are no disponible blocks");
 							}
 							continue;
 						}
